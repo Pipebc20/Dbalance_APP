@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ExpenseListComponent } from './components/expense-list/expense-list.component';
 import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
+import { RegistrarGastoComponent } from './registrar-gasto/registrar-gasto.component';
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [

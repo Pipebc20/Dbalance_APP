@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExpenseService } from 'src/app/services/expense.service';
+import { GastoService } from '../../services/gasto.service';
+import { ChangeDetectorRef } from '@angular/core';
 import * as Toastify from 'toastify-js';
 
 @Component({
@@ -11,17 +12,18 @@ import * as Toastify from 'toastify-js';
 })
 export class ExpenseFormComponent implements OnInit {
   expenseForm: FormGroup = new FormGroup({
-    type        : new FormControl('', [Validators.required, Validators.maxLength(100)]),
-    amount      : new FormControl('', Validators.required),
-    description : new FormControl('', Validators.required),
-    expense_date: new FormControl('', Validators.required)
+    categoria: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+    monto: new FormControl('', Validators.required),
+    descripcion: new FormControl('', Validators.required),
+    fecha: new FormControl('', Validators.required)
   });
   expenseId?: number;
 
   constructor(
-    private expenseService: ExpenseService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private gastoService: GastoService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -29,16 +31,32 @@ export class ExpenseFormComponent implements OnInit {
   }
 
   saveExpense(): void {
-    if (this.expenseId) {
-      this.expenseService.updateExpense(this.expenseId, this.expenseForm.value).subscribe(expense => {
-        this.showSuccessToast("Gasto actualizado con éxito");
-        this.router.navigateByUrl('/gastos');
-      });
-    } else {
-      this.expenseService.createExpense(this.expenseForm.value).subscribe(expense => {
-        this.showSuccessToast("Gasto agregado con éxito");
-        this.router.navigateByUrl('/gastos');
-      });
+    if (this.expenseForm.valid) {
+      const gasto = this.expenseForm.value;
+
+      if (this.expenseId) {
+        this.gastoService.actualizarGasto(this.expenseId, gasto).subscribe(
+          (gastoActualizado) => {
+            this.showSuccessToast('¡Gasto actualizado exitosamente!');
+            this.router.navigate(['/gastos']);
+          },
+          (error) => {
+            console.error('Error al actualizar el gasto:', error);
+            alert('Hubo un error al actualizar el gasto.');
+          }
+        );
+      } else {
+        this.gastoService.guardarGasto(gasto).subscribe(
+          (gastoGuardado) => {
+            this.showSuccessToast('¡Gasto guardado exitosamente!');
+            this.router.navigate(['/gastos']);
+          },
+          (error) => {
+            console.error('Error al guardar el gasto:', error);
+            alert('Hubo un error al guardar el gasto.');
+          }
+        );
+      }
     }
   }
 
@@ -46,21 +64,17 @@ export class ExpenseFormComponent implements OnInit {
     const errorsObject = this.expenseForm.get(field)?.errors ?? {};
     const errors = Object.keys(errorsObject);
 
-    if (errors.length && (this.expenseForm.get(field)?.touched || this.expenseForm.get(field)?.dirty)) {
-      return true;
-    }
+    const touched = this.expenseForm.get(field)?.touched ?? false;
+    const dirty = this.expenseForm.get(field)?.dirty ?? false;
 
-    return false;
+    return errors.length > 0 && (touched || dirty);
   }
 
   getCurrentError(field: string): string {
     const errorsObject = this.expenseForm.get(field)?.errors ?? {};
     const errors = Object.keys(errorsObject);
 
-    if (!errors)
-      return '';
-
-    return errors[0];
+    return errors.length ? errors[0] : '';
   }
 
   getFormTitle(): string {
@@ -71,7 +85,16 @@ export class ExpenseFormComponent implements OnInit {
     this.expenseId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (this.expenseId) {
-      this.expenseService.getExpense(this.expenseId).subscribe(expense => this.expenseForm.patchValue(expense));
+      this.gastoService.obtenerGasto(this.expenseId).subscribe(expense => {
+        if (expense.fecha) {
+          expense.fecha = new Date(expense.fecha).toISOString().split('T')[0];
+        }
+        this.expenseForm.patchValue(expense);
+        this.cdr.detectChanges();
+        console.log(expense);
+      }, (error) => {
+        console.error('Error al obtener el gasto:', error);
+      });
     }
   }
 

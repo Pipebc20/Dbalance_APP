@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Expense } from 'src/app/models/expense.model';
-import { ExpenseService } from 'src/app/services/expense.service';
-import * as Toastify from 'toastify-js';
+import { GastoService } from '../../services/gasto.service';
+
 
 @Component({
   selector: 'app-expense-list',
@@ -9,48 +8,32 @@ import * as Toastify from 'toastify-js';
   styleUrls: ['./expense-list.component.scss']
 })
 export class ExpenseListComponent implements OnInit {
-  expenses: Expense[] = [];
+  expenses: any[] = [];
   total: number = 0;
 
-  constructor(
-    private expenseService: ExpenseService
-  ) { }
+  constructor(private gastoService: GastoService) {}
 
   ngOnInit(): void {
-    this.loadDataIntoTable();
+    this.obtenerGastos();
+  }
+
+  obtenerGastos(): void {
+    this.gastoService.obtenerGastos().subscribe(response => {
+      if (response && response.data) {
+        this.expenses = response.data;
+        this.calcularTotal();
+      }
+    });
+  }
+
+  calcularTotal(): void {
+    this.total = this.expenses.reduce((sum, expense) => sum + parseFloat(expense.monto), 0);
   }
 
   deleteExpense(id: number): void {
-    this.expenseService.deleteExpense(id).subscribe(response => {
-      this.showSuccessToast('Gasto eliminado');
-      this.expenses = this.expenses.filter(expense => expense.id != id);
-      this.calculateTotal();
+    this.gastoService.eliminarGasto(id).subscribe(() => {
+      this.expenses = this.expenses.filter(expense => expense.id !== id);
+      this.calcularTotal();
     });
-  }
-
-  private loadDataIntoTable(): void {
-    this.expenseService.getExpenses().subscribe(expenses => {
-      this.expenses = expenses;
-      this.calculateTotal();
-    });
-  }
-
-  private calculateTotal(): void {
-    this.total = this.expenses.reduce((accumulated, currentValue) => {
-      return accumulated + Number(currentValue.amount);
-    }, 0);
-  }
-
-  private showSuccessToast(message: string): void {
-    Toastify({
-      text: message,
-      close: true,
-      gravity: "bottom",
-      position: "center",
-      stopOnFocus: true,
-      style: {
-        background: "#189586",
-      }
-    }).showToast();
   }
 }

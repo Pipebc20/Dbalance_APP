@@ -1,0 +1,55 @@
+<div class="container">
+  <h2>Registrar Gasto</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label for="categoria">Categoría:</label>
+      <input
+        id="categoria"
+        type="text"
+        formControlName="categoria"
+        placeholder="Ejemplo: Comida"
+      />
+    </div>
+
+    <div>
+      <label for="monto">Monto:</label>
+      <input
+        id="monto"
+        type="number"
+        formControlName="monto"
+        placeholder="Ejemplo: 150.00"
+      />
+    </div>
+
+    <div>
+      <label for="fecha">Fecha:</label>
+      <input id="fecha" type="date" formControlName="fecha" />
+    </div>
+
+    <div>
+      <label for="descripcion">Descripción:</label>
+      <textarea
+        id="descripcion"
+        formControlName="descripcion"
+        placeholder="Ejemplo: Almuerzo con amigos"
+      ></textarea>
+    </div>
+
+    <button type="submit" >Guardar Gasto</button>
+  </form>
+
+  <h3>Lista de Gastos</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Categoría</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
