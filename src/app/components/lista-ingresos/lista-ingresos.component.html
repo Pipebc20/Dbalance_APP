@@ -1,0 +1,52 @@
+<div class="d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5 mb-4">
+  <h2 class="section-title">Ingresos</h2>
+
+  <div class="d-flex align-items-center flex-wrap gap-3 gap-sm-5">
+    <p class="m-0 total-income-text">
+      Total ingresos:
+      <span class="fw-bold ms-1">
+        <i class="ri-arrow-up-s-fill text-success"></i> {{ total | currency }}
+      </span>
+    </p>
+    <a class="btn btn-primary" routerLink="/ingresos/nuevo">Agregar ingreso</a>
+  </div>
+</div>
+
+<div class="table-responsive mb-5">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Categoría</th>
+        <th scope="col">Monto</th>
+        <th scope="col">Descripción</th>
+        <th scope="col" width="180">Fecha</th>
+        <th scope="col" class="table-head-action"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="ingresos.length; else emptyMessage">
+        <tr *ngFor="let ingreso of ingresos">
+          <td>{{ ingreso.id }}</td>
+          <td>{{ ingreso.categoria }}</td>
+          <td>{{ ingreso.monto | currency }}</td>
+          <td>{{ ingreso.descripcion }}</td>
+          <td>{{ ingreso.fecha | date:'dd/MM/yyyy' }}</td>
+          <td class="table-data-action">
+            <div>
+              <a [routerLink]="['/ingresos', ingreso.id, 'editar']"><i class="ri-edit-box-line"></i></a>
+              <button class="btn btn-link p-0" (click)="deleteIngreso(ingreso.id)">
+                <i class="ri-delete-bin-2-line"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      <ng-template #emptyMessage>
+        <tr>
+          <td colspan="6">No hay ingresos registrados</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+</div>

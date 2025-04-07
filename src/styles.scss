@@ -3,9 +3,19 @@
 @import 'assets/scss/table';
 @import 'assets/scss/button';
 @import 'toastify-js/src/toastify';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 .section-title {
   margin: 0;
   font-weight: bold;
   color: $my-dark-color;
 }
+
+a,
+button,
+.dropdown-item {
+  cursor: pointer;
+}
+

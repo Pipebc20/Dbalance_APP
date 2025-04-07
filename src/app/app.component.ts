@@ -20,17 +20,17 @@ export class AppComponent {
       monto: [null, [Validators.required, Validators.min(0)]], // Validar monto como positivo
       fecha: ['', Validators.required], // Campo obligatorio
       descripcion: [''] // Descripción opcional
-    });
-  }
+      });
+    }
 
-  // Método para manejar el envío del formulario
-  onSubmit() {
-    if (this.gastoForm.valid) {
-      console.log('Formulario enviado:', this.gastoForm.value); // Depuración
-      this.listaGastos.push(this.gastoForm.value);
-      this.gastoForm.reset();
-    } else {
-      console.log('Formulario no válido');
+    // Método para manejar el envío del formulario
+    onSubmit() {
+      if (this.gastoForm.valid) {
+        console.log('Formulario enviado:', this.gastoForm.value); // Depuración
+        this.listaGastos.push(this.gastoForm.value);
+        this.gastoForm.reset();
+      } else {
+        console.log('Formulario no válido');
+      }
     }
   }
-}

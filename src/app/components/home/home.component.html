@@ -1,5 +1,59 @@
-<section class="d-flex align-items-center justify-content-center flex-column text-center">
-  <h1 class="fw-bold mb-3">Bienvenido a BudgetBuddy</h1>
-  <p class="lead">La aplicación donde puedes registrar tus gastos de manera rápida y fácil</p>
-  <a class="btn btn-primary mt-3" routerLink="/gastos/nuevo">Registrar un gasto</a>
+<section class="d-flex align-items-center justify-content-center flex-column text-center py-16">
+  <h1 class="fw-bold mb-3">{{ 'WELCOME' | translate }} 💰📈</h1>
+  <p class="lead">{{ 'DESCRIPTION' | translate }}</p>
+  <div class="d-flex gap-3 mt-3">
+    <a class="btn btn-primary" routerLink="/gastos/nuevo">{{ 'ADD_EXPENSE' | translate }}</a>
+    <a class="btn btn-secondary" routerLink="/ingresos/nuevo">{{ 'ADD_INCOME' | translate }}</a>
+  </div>
+</section>
+
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold mb-8 text-center">💰 {{ 'FINANCIAL_SUMMARY' | translate }}</h2>
+    <div class="grid grid-flow-col auto-cols-max gap-4">
+      <!-- Tarjeta de Ingresos -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden p-6">
+        <h3 class="text-2xl font-bold mb-4">📈 {{ 'INCOME' | translate }}</h3>
+        <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
+              <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ingreso of ingresos">
+              <td class="border border-gray-300 px-4 py-2">{{ ingreso.categoria }}</td>
+              <td class="border border-gray-300 px-4 py-2">${{ ingreso.monto }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-6 text-center">
+          <canvas baseChart [data]="ingresosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Gastos -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden p-6">
+        <h3 class="text-2xl font-bold mb-4">📉 {{ 'EXPENSES' | translate }}</h3>
+        <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
+              <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let gasto of gastos">
+              <td class="border border-gray-300 px-4 py-2">{{ gasto.categoria }}</td>
+              <td class="border border-gray-300 px-4 py-2">${{ gasto.monto }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-6 text-center">
+          <canvas baseChart [data]="gastosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

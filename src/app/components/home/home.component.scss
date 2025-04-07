@@ -1,3 +1,44 @@
 section {
   height: calc(100vh - 64px);
 }
+
+.container {
+  max-width: 1200px;
+}
+
+.table-auto th, .table-auto td {
+  text-align: center;
+}
+
+.resumen-financiero {
+  display: flex;
+  flex-direction: row; // Alinear en fila (horizontalmente)
+  gap: 20px; // Espacio entre las tarjetas
+  justify-content: center; // Centrar en la pantalla
+
+  .tarjeta {
+    width: 300px; // Reducir el ancho de las tarjetas
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px; // Reducir tamaño del texto
+
+      th, td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: left;
+      }
+
+      thead {
+        background: #f8f8f8;
+        font-weight: bold;
+      }
+    }
+  }
+}
+

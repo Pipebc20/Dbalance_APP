@@ -14,9 +14,12 @@
   .nav-link {
     position: relative;
     padding-left: 0.5rem;
+    color: #8a8a8a; // 🔹 Gris más oscuro para los enlaces
+    transition: color 0.3s ease-in-out;
 
     &.active {
       text-shadow: 0 0 6px rgba(52, 152, 219, 0.80);
+      color: white; // 🔹 Activo en blanco
     }
 
     &.active::before {
@@ -31,5 +34,41 @@
       background-color: $my-primary-color;
       border-radius: 50%;
     }
+
+    &:hover {
+      color: $my-primary-color; // 🔹 Azul al pasar el mouse
+    }
+  }
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active {
+  background-color: #e0f0ff !important; /* azul suave */
+  color: #0d6efd !important; /* azul Bootstrap */
+  font-weight: bold;
+}
+
+// 🔹 Ajuste para "Cerrar sesión" con margen más grande a la derecha
+.logout-btn {
+  background: none;
+  border: none;
+  color: white; // 🔥 "Cerrar sesión" siempre en blanco
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease-in-out;
+  margin-left: 300px; // 🔹 Más separación de los demás elementos
+
+  &:hover {
+    color: $my-primary-color; // 🔹 Azul al pasar el mouse
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
   }
 }
