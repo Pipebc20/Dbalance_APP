@@ -1,45 +1,109 @@
-<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+<div class="container-fluid d-flex justify-content-center align-items-center vh-80">
   <div class="row w-100">
     <div class="col-12 col-sm-10 col-md-6 col-lg-4 mx-auto">
       <div class="card p-4 shadow" style="border-radius: 12px;">
         <h2 class="text-center">{{ 'REGISTER' | translate }}</h2>
         <p class="text-center text-muted">{{ 'CREATE_ACCOUNT' | translate }} ✨</p>
 
-        <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()">
+        <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()" class="mb-3">
           <div class="mb-3">
-            <label class="form-label">{{ 'FULL_NAME' | translate }}</label>
-            <input type="text" class="form-control" formControlName="name" placeholder="{{ 'ENTER_FULL_NAME' | translate }}">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ 'EMAIL' | translate }}</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="{{ 'ENTER_EMAIL' | translate }}">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ 'PASSWORD' | translate }}</label>
-            <input type="password" class="form-control" formControlName="password" placeholder="{{ 'ENTER_PASSWORD' | translate }}">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ 'CONFIRM_PASSWORD' | translate }}</label>
-            <input type="password" class="form-control" formControlName="confirmPassword" placeholder="{{ 'CONFIRM_PASSWORD_PLACEHOLDER' | translate }}">
+            <label for="nameInput" class="form-label">{{ 'FULL_NAME' | translate }}</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control {{ hasError('name') ? 'is-invalid' : '' }}"
+              id="nameInput"
+              [placeholder]="'ENTER_FULL_NAME' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('name')">
+              <span *ngSwitchCase="'required'">{{ 'NAME_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'maxlength'">{{ 'NAME_MAXLENGTH' | translate }}</span>
+            </div>
           </div>
 
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="recordar">
-            <label class="form-check-label" for="recordar">{{ 'SHOW_PASSWORD' | translate }}</label>
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">{{ 'EMAIL' | translate }}</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control {{ hasError('email') ? 'is-invalid' : '' }}"
+              id="emailInput"
+              [placeholder]="'ENTER_EMAIL' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('email')">
+              <span *ngSwitchCase="'required'">{{ 'EMAIL_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'email'">{{ 'EMAIL_INVALID' | translate }}</span>
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100 mt-3 d-flex align-items-center justify-content-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 me-2" width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m8-10a4 4 0 110-8 4 4 010 8z"/>
+          <div class="mb-3">
+            <label for="passwordInput" class="form-label">{{ 'PASSWORD' | translate }}</label>
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-control {{ hasError('password') ? 'is-invalid' : '' }}"
+              id="passwordInput"
+              [placeholder]="'ENTER_PASSWORD' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('password')">
+              <span *ngSwitchCase="'required'">{{ 'PASSWORD_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'minlength'">{{ 'PASSWORD_MINLENGTH' | translate }}</span>
+              <span *ngSwitchCase="'pattern'">{{ 'PASSWORD_PATTERN' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmPasswordInput" class="form-label">{{ 'CONFIRM_PASSWORD' | translate }}</label>
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              class="form-control {{ hasError('confirmPassword') ? 'is-invalid' : '' }}"
+              id="confirmPasswordInput"
+              [placeholder]="'CONFIRM_PASSWORD_PLACEHOLDER' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('confirmPassword')">
+              <span *ngSwitchCase="'required'">{{ 'CONFIRM_PASSWORD_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'passwordsMismatch'">{{ 'PASSWORDS_MISMATCH' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="form-check mb-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="mostrarPassword"
+              [(ngModel)]="mostrarPassword"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            <label class="form-check-label" for="mostrarPassword">{{ 'SHOW_PASSWORD' | translate }}</label>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100 d-flex align-items-center justify-content-center"
+            [disabled]="registroForm.invalid || loading"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 me-2"
+              width="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m8-10a4 4 0 110-8 4 4 0 010 8z"/>
             </svg>
             {{ 'REGISTER_BUTTON' | translate }}
           </button>
-
-          <p class="text-center mt-3">
-            {{ 'ALREADY_HAVE_ACCOUNT' | translate }}
-            <a routerLink="/login" class="text-primary">{{ 'LOGIN_HERE' | translate }}</a>
-          </p>
         </form>
+
+        <p class="text-center">
+          {{ 'ALREADY_HAVE_ACCOUNT' | translate }}
+          <a routerLink="/login" class="text-primary">{{ 'LOGIN_HERE' | translate }}</a>
+        </p>
       </div>
     </div>
   </div>

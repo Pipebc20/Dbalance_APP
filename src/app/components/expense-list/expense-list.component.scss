@@ -3,3 +3,9 @@
     width: 100%;
   }
 }
+
+/* Títulos de sección */
+h2.section-title {
+  font-size: 2rem; // Aumentamos de 2rem (típico para h2 en Bootstrap) a 2.5rem
+  line-height: 1.2; // Ajustamos la altura de línea para mejor legibilidad
+}

@@ -1,49 +1,76 @@
 <div class="d-flex align-items-center justify-content-between flex-wrap mt-5 mb-4 border-bottom">
-  <h2 class="section-title mb-4">{{ getFormTitle() }}</h2>
+  <h2 class="section-title mb-4">{{ formTitle }}</h2>
   <div class="d-flex gap-2 mb-3">
-    <a class="btn btn-outline-secondary" routerLink="/ingresos">Cancelar</a>
-    <button type="button" class="btn btn-primary" (click)="saveIngreso()" [disabled]="this.ingresoForm.invalid">Guardar ingreso</button>
+    <a class="btn btn-outline-secondary" routerLink="/ingresos">{{ "CANCEL" | translate }}</a>
+    <button type="button" class="btn btn-primary" (click)="saveIngreso()" [disabled]="ingresoForm.invalid">
+      {{ "SAVE_INCOME_BTN" | translate }}
+    </button>
   </div>
 </div>
 
 <form class="mb-5" [formGroup]="ingresoForm" (ngSubmit)="saveIngreso()">
   <div class="mb-3">
-    <label for="categoriaInput" class="form-label">Categoría del ingreso</label>
-    <input type="text" formControlName="categoria" class="form-control {{ hasError('categoria') ? 'is-invalid' : '' }}" id="categoriaInput" placeholder="Salario, Venta, Otros">
+    <label for="categoriaInput" class="form-label">{{ "CATEGORY_LABEL" | translate }}</label>
+    <input
+      type="text"
+      formControlName="categoria"
+      class="form-control {{ hasError('categoria') ? 'is-invalid' : '' }}"
+      id="categoriaInput"
+      [placeholder]="'CATEGORY_PLACEHOLDER' | translate"
+    />
     <div class="invalid-feedback" [ngSwitch]="getCurrentError('categoria')">
-      <span *ngSwitchCase="'required'">El campo categoría es requerido</span>
-      <span *ngSwitchCase="'maxlength'">El campo categoría debe contener 100 caracteres como máximo</span>
+      <span *ngSwitchCase="'required'">{{ "CATEGORY_REQUIRED" | translate }}</span>
+      <span *ngSwitchCase="'maxlength'">{{ "CATEGORY_MAXLENGTH" | translate }}</span>
     </div>
   </div>
 
   <div class="mb-3">
-    <label for="montoInput" class="form-label">Cantidad recibida</label>
+    <label for="montoInput" class="form-label">{{ "AMOUNT_LABEL" | translate }}</label>
     <div class="input-group has-validation">
       <span class="input-group-text">$</span>
-      <input type="number" formControlName="monto" class="form-control {{ hasError('monto') ? 'is-invalid' : '' }}" id="montoInput" placeholder="0.00">
+      <input
+        type="number"
+        formControlName="monto"
+        class="form-control {{ hasError('monto') ? 'is-invalid' : '' }}"
+        id="montoInput"
+        [placeholder]="'AMOUNT_PLACEHOLDER' | translate"
+      />
       <div class="invalid-feedback" [ngSwitch]="getCurrentError('monto')">
-        <span *ngSwitchCase="'required'">El campo cantidad es requerido</span>
+        <span *ngSwitchCase="'required'">{{ "AMOUNT_REQUIRED" | translate }}</span>
       </div>
     </div>
   </div>
 
   <div class="mb-3">
-    <label for="descripcionInput" class="form-label">Descripción</label>
-    <textarea formControlName="descripcion" class="form-control {{ hasError('descripcion') ? 'is-invalid' : '' }}" id="descripcionInput" placeholder="Escribe una descripción del ingreso"></textarea>
+    <label for="descripcionInput" class="form-label">{{ "DESCRIPTION_LABEL" | translate }}</label>
+    <textarea
+      formControlName="descripcion"
+      class="form-control {{ hasError('descripcion') ? 'is-invalid' : '' }}"
+      id="descripcionInput"
+      [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"
+    ></textarea>
     <div class="invalid-feedback" [ngSwitch]="getCurrentError('descripcion')">
-      <span *ngSwitchCase="'required'">El campo descripción es requerido</span>
+      <span *ngSwitchCase="'required'">{{ "DESCRIPTION_REQUIRED" | translate }}</span>
     </div>
   </div>
 
   <div class="mb-3">
-    <label for="fechaInput" class="form-label">Fecha del ingreso</label>
-    <input type="date" formControlName="fecha" class="form-control {{ hasError('fecha') ? 'is-invalid' : '' }}" id="fechaInput">
+    <label for="fechaInput" class="form-label">{{ "DATE_LABEL" | translate }}</label>
+    <input
+      type="date"
+      formControlName="fecha"
+      class="form-control {{ hasError('fecha') ? 'is-invalid' : '' }}"
+      id="fechaInput"
+      [min]="'1950-01-01'"
+      [max]="currentDate"
+    />
     <div class="invalid-feedback" [ngSwitch]="getCurrentError('fecha')">
-      <span *ngSwitchCase="'required'">El campo fecha de ingreso es requerido</span>
-      <span *ngSwitchCase="'invalidDate'">La fecha debe estar entre 1950 y el año actual</span>
+      <span *ngSwitchCase="'required'">{{ "DATE_REQUIRED" | translate }}</span>
+      <span *ngSwitchCase="'invalidDate'">{{ "DATE_INVALID" | translate }}</span>
     </div>
   </div>
 
-
-  <button type="submit" class="btn btn-primary" [disabled]="ingresoForm.invalid">Guardar ingreso</button>
+  <button type="submit" class="btn btn-primary" [disabled]="ingresoForm.invalid">
+    {{ "SAVE_INCOME_BTN" | translate }}
+  </button>
 </form>

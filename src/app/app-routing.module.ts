@@ -5,6 +5,7 @@ import { ExpenseFormComponent } from './components/expense-form/expense-form.com
 import { LoginComponent } from './components/login/login.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { RegistrarGastoComponent } from './registrar-gasto/registrar-gasto.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { IngresoComponent } from './components/ingresos/ingresos.component';
 import { ListaIngresosComponent } from './components/lista-ingresos/lista-ingresos.component';
 import { HomeComponent } from './components/home/home.component';

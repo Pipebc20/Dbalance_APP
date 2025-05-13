@@ -1,48 +1,113 @@
-<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+<div class="container-fluid d-flex justify-content-center align-items-center vh-80">
   <div class="row w-100">
     <div class="col-12 col-sm-10 col-md-6 col-lg-4 mx-auto">
       <div class="card p-4 shadow" style="border-radius: 12px;">
-        <h2 class="text-center">{{ 'LOGIN' | translate }}</h2>
-        <p class="text-center text-muted">{{ 'WELCOME' | translate }} 👋</p>
+        <h2 class="text-center">{{ 'LOGIN' | translate }} </h2>
+        <p class="text-center text-muted">{{ 'WELCOME1' | translate }} 👋</p>
 
-        <button class="btn btn-light border w-100 mb-3 d-flex align-items-center justify-content-center">
+        <button class="btn btn-light border w-100 mb-3 d-flex align-items-center justify-content-center" (click)="loginConGoogle()">
           <img src="https://www.svgrepo.com/show/355037/google.svg" width="20" class="me-2">
           {{ 'LOGIN_WITH_GOOGLE' | translate }}
         </button>
 
-        <form>
+        <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()" class="mb-3">
           <div class="mb-3">
-            <label class="form-label">{{ 'EMAIL' | translate }}</label>
-            <input type="email" class="form-control" placeholder="{{ 'ENTER_EMAIL' | translate }}"
-                   [(ngModel)]="usuario.email" name="email" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ 'PASSWORD' | translate }}</label>
-            <input type="password" class="form-control" placeholder="{{ 'ENTER_PASSWORD' | translate }}"
-                   [(ngModel)]="usuario.password" name="password" required>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="recordar">
-              <label class="form-check-label" for="recordar">{{ 'SHOW_PASSWORD' | translate }}</label>
+            <label for="emailInput" class="form-label">{{ 'EMAIL' | translate }}</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control {{ hasError('email') ? 'is-invalid' : '' }}"
+              id="emailInput"
+              [placeholder]="'ENTER_EMAIL' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('email')">
+              <span *ngSwitchCase="'required'">{{ 'EMAIL_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'email'">{{ 'EMAIL_INVALID' | translate }}</span>
             </div>
-            <a href="#" class="text-primary">{{ 'FORGOT_PASSWORD' | translate }}</a>
           </div>
 
-          <button (click)="iniciarSesion()" class="btn btn-primary w-100 mt-3 d-flex align-items-center justify-content-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" class="me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="mb-3">
+            <label for="passwordInput" class="form-label">{{ 'PASSWORD' | translate }}</label>
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-control {{ hasError('password') ? 'is-invalid' : '' }}"
+              id="passwordInput"
+              [placeholder]="'ENTER_PASSWORD' | translate"
+            />
+            <div class="invalid-feedback" [ngSwitch]="getCurrentError('password')">
+              <span *ngSwitchCase="'required'">{{ 'PASSWORD_REQUIRED' | translate }}</span>
+              <span *ngSwitchCase="'minlength'">{{ 'PASSWORD_MINLENGTH' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="mostrarPassword"
+                [(ngModel)]="mostrarPassword"
+                [ngModelOptions]="{ standalone: true }"
+              >
+              <label class="form-check-label" for="mostrarPassword">{{ 'SHOW_PASSWORD' | translate }}</label>
+            </div>
+            <a (click)="openModal(forgotPasswordModal)" class="text-primary">{{ 'FORGOT_PASSWORD' | translate }}</a>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100 d-flex align-items-center justify-content-center"
+            [disabled]="loginForm.invalid"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              class="me-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 16v4a2 2 0 0 1-2 2h-4"/><path d="M3 10v4a2 2 0 0 0 2 2h4"/>
             </svg>
             {{ 'LOGIN_BUTTON' | translate }}
           </button>
-
-          <p class="text-center mt-3">
-            {{ 'DONT_HAVE_ACCOUNT' | translate }}
-            <a (click)="irARegistro()" style="cursor: pointer; color: blue;">{{ 'REGISTER_NOW' | translate }}</a>
-          </p>
         </form>
+
+        <p class="text-center">
+          {{ 'DONT_HAVE_ACCOUNT' | translate }}
+          <a (click)="irARegistro()" style="cursor: pointer; color: blue;">{{ 'REGISTER_NOW' | translate }}</a>
+        </p>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #forgotPasswordModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'RESET_PASSWORD' | translate }}</h4>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <h4 class="maintenance-message">{{ 'FIXING' | translate }}</h4>
+    <p>{{ 'RESET_PASSWORD_MESSAGE' | translate }}</p>
+    <form (ngSubmit)="resetPassword()">
+      <div class="mb-3">
+        <label for="resetEmailInput" class="form-label">{{ 'EMAIL' | translate }}</label>
+        <input
+          type="email"
+          class="form-control"
+          id="resetEmailInput"
+          [(ngModel)]="resetEmail"
+          [ngModelOptions]="{ standalone: true }"
+          [placeholder]="'ENTER_EMAIL' | translate"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">{{ 'SEND_LINK' | translate }}</button>
+    </form>
+  </div>
+</ng-template>

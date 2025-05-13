@@ -10,6 +10,24 @@ section {
   text-align: center;
 }
 
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2.0rem;
+  line-height: 1.2;
+}
+
+/* Tarjetas de Ingresos y Gastos */
+.bg-white {
+  h3.font-bold {
+    font-size: 1.75rem; // Aumentamos de 1.5rem (equivalente a text-2xl) a 1.75rem
+    line-height: 1.2;
+  }
+}
+
 .resumen-financiero {
   display: flex;
   flex-direction: row; // Alinear en fila (horizontalmente)
@@ -42,3 +60,36 @@ section {
   }
 }
 
+.d-flex {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; // Permite que los elementos se ajusten si no caben
+}
+
+.table-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.charts-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 300px;
+}
+
+.container {
+  max-width: 1200px; // Limita el ancho máximo para evitar que se extienda demasiado
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}

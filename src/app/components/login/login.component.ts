@@ -1,36 +1,110 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+   import { FormControl, FormGroup, Validators } from '@angular/forms';
+   import { Router } from '@angular/router';
+   import { AuthService } from '../../services/auth.service';
+   import { TranslateService } from '@ngx-translate/core';
+   import * as Toastify from 'toastify-js';
+   import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
-})
-export class LoginComponent {
-  usuario = { email: '', password: '' };
+   @Component({
+     selector: 'app-login',
+     templateUrl: './login.component.html',
+     styleUrls: ['./login.component.scss']
+   })
+   export class LoginComponent implements OnInit {
+     loginForm: FormGroup = new FormGroup({
+       email: new FormControl('', [Validators.required, Validators.email]),
+       password: new FormControl('', [Validators.required, Validators.minLength(6)])
+     });
+     mostrarPassword: boolean = false;
+     resetEmail: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+     constructor(
+       private authService: AuthService,
+       private router: Router,
+       private translate: TranslateService,
+       private modalService: NgbModal
+     ) {}
 
-  iniciarSesion() {
-    this.authService.login(this.usuario.email, this.usuario.password).subscribe(
-      (response) => {
-        localStorage.setItem('token', response.token); // Guardar token en localStorage
-        this.router.navigate(['/inicio']); // Redirigir al home
-      },
-      (error) => {
-        alert('Credenciales incorrectas');
-        console.error('Error en inicio de sesión', error);
+     ngOnInit(): void {}
+
+     iniciarSesion(): void {
+      if (this.loginForm.valid) {
+        const { email, password } = this.loginForm.value;
+        this.authService.login(email, password).subscribe(
+          (response) => {
+            this.showSuccessToast('LOGIN_SUCCESS');
+            // No redirigir manualmente, el AuthService lo maneja
+          },
+          (error) => {
+            console.error('Error en inicio de sesión', error);
+            this.showErrorToast('LOGIN_ERROR');
+          }
+        );
       }
-    );
-  }
+    }
 
-  irARegistro() {
-    this.router.navigate(['/registro']); // Redirige al formulario de registro
-  }
+     loginConGoogle(): void {
+       this.showErrorToast('GOOGLE_LOGIN_NOT_IMPLEMENTED');
+     }
 
-  loginConGoogle() {
-    alert('Funcionalidad de Google aún no implementada');
-    // Aquí puedes integrar Firebase Authentication o Google OAuth en el futuro
-  }
-}
+     irARegistro(): void {
+       this.router.navigate(['/registro']);
+     }
+
+     openModal(content: any): void {
+       this.modalService.open(content);
+     }
+
+     resetPassword(): void {
+       if (this.resetEmail) {
+         this.authService.resetPassword(this.resetEmail).subscribe(
+           (response) => {
+             this.showSuccessToast('RESET_LINK_SENT');
+             this.modalService.dismissAll();
+           },
+           (error) => {
+             console.error('Error al enviar enlace', error);
+             this.showErrorToast('RESET_LINK_ERROR');
+           }
+         );
+       }
+     }
+
+     hasError(field: string): boolean {
+       const control = this.loginForm.get(field);
+       return !!(control?.errors && (control.touched || control.dirty));
+     }
+
+     getCurrentError(field: string): string {
+       const errors = this.loginForm.get(field)?.errors ?? {};
+       const errorKeys = Object.keys(errors);
+       return errorKeys.length ? errorKeys[0] : '';
+     }
+
+     private showSuccessToast(messageKey: string): void {
+       this.translate.get(messageKey).subscribe((message: string) => {
+         Toastify({
+           text: message,
+           close: true,
+           gravity: 'bottom',
+           position: 'center',
+           stopOnFocus: true,
+           style: { background: '#189586' }
+         }).showToast();
+       });
+     }
+
+     private showErrorToast(messageKey: string): void {
+       this.translate.get(messageKey).subscribe((message: string) => {
+         Toastify({
+           text: message,
+           close: true,
+           gravity: 'bottom',
+           position: 'center',
+           stopOnFocus: true,
+           style: { background: '#dc3545' }
+         }).showToast();
+       });
+     }
+   }

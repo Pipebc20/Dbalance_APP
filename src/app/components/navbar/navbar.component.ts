@@ -34,7 +34,8 @@ export class NavbarComponent {
   languages = [
     { code: 'es', label: 'Español' },
     { code: 'en', label: 'English' },
-    { code: 'fr', label: 'Français' }
+    { code: 'fr', label: 'Français' },
+    { code: 'pt', label: 'Português' }
   ];
 
   getFlagCode(langCode: string): string {

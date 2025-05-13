@@ -14,44 +14,66 @@
       <!-- Tarjeta de Ingresos -->
       <div class="bg-white rounded-lg shadow-md overflow-hidden p-6">
         <h3 class="text-2xl font-bold mb-4">📈 {{ 'INCOME' | translate }}</h3>
-        <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
-          <thead class="bg-gray-200">
-            <tr>
-              <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
-              <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ingreso of ingresos">
-              <td class="border border-gray-300 px-4 py-2">{{ ingreso.categoria }}</td>
-              <td class="border border-gray-300 px-4 py-2">${{ ingreso.monto }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="mt-6 text-center">
-          <canvas baseChart [data]="ingresosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+        <div class="d-flex flex-wrap gap-4">
+          <div class="table-section flex-1 min-w-[300px]">
+            <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
+              <thead class="bg-gray-200">
+                <tr>
+                  <th class="border border-gray-300 px-4 py-2">#</th>
+                  <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
+                  <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="ingresos.length === 0">
+                  <td colspan="3" class="border border-gray-300 px-4 py-2 text-center">{{ 'INCOME_WARM' | translate }}</td>
+                </tr>
+                <tr *ngFor="let ingreso of ingresos">
+                  <td class="border border-gray-300 px-4 py-2">{{ ingreso.numero_orden }}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{ ingreso.categoria }}</td>
+                  <td class="border border-gray-300 px-4 py-2">${{ ingreso.monto }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="charts-section flex-1 min-w-[300px] h-[300px]">
+            <div class="mt-6 text-center h-full">
+              <canvas baseChart #ingresosChart [data]="ingresosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Tarjeta de Gastos -->
       <div class="bg-white rounded-lg shadow-md overflow-hidden p-6">
         <h3 class="text-2xl font-bold mb-4">📉 {{ 'EXPENSES' | translate }}</h3>
-        <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
-          <thead class="bg-gray-200">
-            <tr>
-              <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
-              <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let gasto of gastos">
-              <td class="border border-gray-300 px-4 py-2">{{ gasto.categoria }}</td>
-              <td class="border border-gray-300 px-4 py-2">${{ gasto.monto }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="mt-6 text-center">
-          <canvas baseChart [data]="gastosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+        <div class="d-flex flex-wrap gap-4">
+          <div class="table-section flex-1 min-w-[300px]">
+            <table class="table-auto w-full border-collapse border border-gray-300 shadow-lg mt-2">
+              <thead class="bg-gray-200">
+                <tr>
+                  <th class="border border-gray-300 px-4 py-2">#</th>
+                  <th class="border border-gray-300 px-4 py-2">{{ 'CATEGORY' | translate }}</th>
+                  <th class="border border-gray-300 px-4 py-2">{{ 'AMOUNT' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="gastos.length === 0">
+                  <td colspan="3" class="border border-gray-300 px-4 py-2 text-center">{{ 'EXPENSE_WARM' | translate }}</td>
+                </tr>
+                <tr *ngFor="let gasto of gastos">
+                  <td class="border border-gray-300 px-4 py-2">{{ gasto.numero_orden }}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{ gasto.categoria }}</td>
+                  <td class="border border-gray-300 px-4 py-2">${{ gasto.monto }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="charts-section flex-1 min-w-[300px] h-[300px]">
+            <div class="mt-6 text-center h-full">
+              <canvas baseChart #gastosChart [data]="gastosChartData" [options]="chartOptions" [type]="chartType"></canvas>
+            </div>
+          </div>
         </div>
       </div>
     </div>

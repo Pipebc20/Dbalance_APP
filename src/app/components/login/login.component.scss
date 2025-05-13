@@ -1,9 +1,15 @@
 .card {
   border: none;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  border-radius: 12px;
+  padding: 2rem; /* Asegurar un padding uniforme */
 }
+
+/* Ajustar los inputs y botones */
 .form-control {
   border-radius: 8px;
 }
+
 button {
   border-radius: 8px;
 }
@@ -11,9 +17,30 @@ button {
 h2 {
   font-weight: bold; /* Negrilla */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+  font-size: 1.7rem; /* Tamaño ajustado */
+  line-height: 1.2; /* Ajustamos la altura de línea */
 }
 
-.card {
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-  border-radius: 12px;
+.maintenance-message {
+  color: #dc3545; /* Rojo para que llame la atención */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+  animation: pulse 1.5s infinite; /* Animación de latido */
+}
+
+/* Animación de latido */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

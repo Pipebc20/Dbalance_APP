@@ -1,14 +1,14 @@
 <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5 mb-4">
-  <h2 class="section-title">Ingresos</h2>
+  <h2 class="section-title">{{ "INCOME_TITLE" | translate }}</h2>
 
   <div class="d-flex align-items-center flex-wrap gap-3 gap-sm-5">
     <p class="m-0 total-income-text">
-      Total ingresos:
+      {{ "TOTAL_INCOME" | translate }}:
       <span class="fw-bold ms-1">
         <i class="ri-arrow-up-s-fill text-success"></i> {{ total | currency }}
       </span>
     </p>
-    <a class="btn btn-primary" routerLink="/ingresos/nuevo">Agregar ingreso</a>
+    <a class="btn btn-primary" routerLink="/ingresos/nuevo">{{ "ADD_INCOME" | translate }}</a>
   </div>
 </div>
 
@@ -17,17 +17,17 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Categoría</th>
-        <th scope="col">Monto</th>
-        <th scope="col">Descripción</th>
-        <th scope="col" width="180">Fecha</th>
+        <th scope="col">{{ "CATEGORY" | translate }}</th>
+        <th scope="col">{{ "AMOUNT" | translate }}</th>
+        <th scope="col">{{ "DESCRIPTION_LABEL" | translate }}</th>
+        <th scope="col" width="180">{{ "DATE" | translate }}</th>
         <th scope="col" class="table-head-action"></th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngIf="ingresos.length; else emptyMessage">
         <tr *ngFor="let ingreso of ingresos">
-          <td>{{ ingreso.id }}</td>
+          <td>{{ ingreso.numero_orden }}</td>
           <td>{{ ingreso.categoria }}</td>
           <td>{{ ingreso.monto | currency }}</td>
           <td>{{ ingreso.descripcion }}</td>
@@ -44,7 +44,7 @@
       </ng-container>
       <ng-template #emptyMessage>
         <tr>
-          <td colspan="6">No hay ingresos registrados</td>
+          <td colspan="6">{{ "NO_DATA_TO_SHOW" | translate }}</td>
         </tr>
       </ng-template>
     </tbody>

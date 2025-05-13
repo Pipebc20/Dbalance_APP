@@ -41,6 +41,21 @@
   }
 }
 
+.navbar-brand .bi-bar-chart {
+  color: #ffffff; /* Color blanco para que coincida con el texto del navbar */
+  transition: color 0.3s; /* Transición suave para el color */
+}
+
+.navbar-brand .bi-bar-chart:hover {
+  color: #007bff; /* Color azul al pasar el mouse */
+}
+
+.navbar-brand {
+  font-size: 1.45rem; /* Tamaño del texto "DBalance", ajusta si es necesario */
+  display: flex;
+  align-items: center;
+}
+
 .dropdown-item:hover,
 .dropdown-item:focus,
 .dropdown-item:active {
