@@ -1,7 +1,7 @@
 
 # Dbalance_APP
 
-Este proyecto se centra en el control de  ingresos y gastos diarios poniendo énfasis en el desarrollo de diversas interfaces destinadas a llevar a cabo operaciones CRUD con la tecnología Angular. Es importante mencionar que está estrechamente vinculado al proyecto [Dbalance_API](https://github.com/Pipebc20/Dbalance_API.git), el cual ofrece una API para la ejecución de las distintas operaciones CRUD, un login y registro para autenticar al usuario y ofrece un selector de idiomas para que traduzca la pagina a 4 idiomas diferentes (Español, Ingles, Frances y Portugues) de tu pagina, ten en cuenta que hay que instalar las librerias correspondientes.
+Este proyecto se centra en el control de  ingresos y gastos diarios poniendo énfasis en el desarrollo de diversas interfaces destinadas a llevar a cabo operaciones CRUD con la tecnología Angular. Es importante mencionar que está estrechamente vinculado al proyecto [Dbalance_API](https://github.com/Pipebc20/Dbalance_API.git), el cual ofrece una API para la ejecución de las distintas operaciones CRUD, un login y registro para autenticar al usuario y ofrece un selector de idiomas para que traduzca la pagina a 4 idiomas diferentes (Español, Ingles, Frances y Portugues), ten en cuenta que hay que instalar las librerias correspondientes.
 
 ## Pre-requisitos 📋
 
