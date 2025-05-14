@@ -27,7 +27,7 @@ npm install
 ```bash
 ng serve o ng serve -o
 ```
-Nota: El comando "ng serve -o" abre el proyecto directamente al navegador de forma automatico, el "-o" significa open, de ahí, el contexto
+Nota: El comando "ng serve -o" abre el proyecto directamente al navegador de forma automatica, el "-o" significa open, de ahí, el contexto
 
 4. Ejecuta el proyecto backend `Dbalance_API` realizado con Laravel para que la aplicación Angular consuma los endpoints, si aún no lo tienes puedes clonarlo desde el [repositorio Dbalance_API](https://github.com/Pipebc20/Dbalance_API.git).
 
