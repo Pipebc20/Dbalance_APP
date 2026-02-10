@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
-import * as Toastify from 'toastify-js';
+import Toastify from 'toastify-js';
 
    @Component({
      selector: 'app-registro',

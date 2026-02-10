@@ -40,7 +40,7 @@
   "EMAIL_INVALID": "O email não é válido.",
   "PASSWORD_REQUIRED": "A senha é obrigatória.",
   "PASSWORD_MINLENGTH": "A senha deve ter pelo menos 8 caracteres.",
-  "REGISTER_SUCCESS": "Registro bem-sucedido! Agora você pode fazer login.",
+  "REGISTER_SUCCESS": "Registro bem-sucedido!, Bem-vindo ao DBalance",
   "REGISTER_ERROR": "Erro ao registrar. Tente novamente.",
   "NAME_REQUIRED": "O nome é obrigatório.",
   "NAME_MAXLENGTH": "O nome não pode exceder 100 caracteres.",

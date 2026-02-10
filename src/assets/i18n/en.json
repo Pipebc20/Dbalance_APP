@@ -40,7 +40,7 @@
   "EMAIL_INVALID": "Email is not valid.",
   "PASSWORD_REQUIRED": "Password is required.",
   "PASSWORD_MINLENGTH": "Password must be at least 8 characters long.",
-  "REGISTER_SUCCESS": "Registration successful! You can now login.",
+  "REGISTER_SUCCESS": "Registration successful!, Welcome to DBalance",
   "REGISTER_ERROR": "Error registering. Please try again.",
   "NAME_REQUIRED": "Name is required.",
   "NAME_MAXLENGTH": "Name cannot exceed 100 characters.",
