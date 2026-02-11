@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngresoService } from '../../services/ingreso.service';
 import { ChangeDetectorRef } from '@angular/core';
-import * as Toastify from 'toastify-js';
+import Toastify from 'toastify-js';
 import { TranslateService } from '@ngx-translate/core';
 import { Ingreso, ApiResponse } from '../../models/financial-models';
 import { Subscription } from 'rxjs';

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { TranslateService } from '@ngx-translate/core';
-import Toastify from 'toastify-js';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+   import { FormControl, FormGroup, Validators } from '@angular/forms';
+   import { Router } from '@angular/router';
+   import { AuthService } from '../../services/auth.service';
+   import { TranslateService } from '@ngx-translate/core';
+   import Toastify from 'toastify-js';
+   import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
    @Component({
      selector: 'app-login',

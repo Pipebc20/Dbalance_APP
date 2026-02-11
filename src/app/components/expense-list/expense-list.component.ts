@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GastoService } from '../../services/gasto.service';
 import { TranslateService } from '@ngx-translate/core';
-import * as Toastify from 'toastify-js';
+import Toastify from 'toastify-js';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component'; // Ajusta la ruta
 
