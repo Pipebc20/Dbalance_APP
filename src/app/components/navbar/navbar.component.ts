@@ -44,7 +44,7 @@ export class NavbarComponent {
   }
 
   goToWebsite() {
-    window.location.href = 'https://dbalance-website.vercel.app/';
+    window.location.href = 'https://dbalance-platform.vercel.app/';
   }
 
   logout() {
