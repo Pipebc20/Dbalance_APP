@@ -43,6 +43,10 @@ export class NavbarComponent {
     return langCode;
   }
 
+  goToWebsite() {
+    window.location.href = 'http://localhost:4201';
+  }
+
   logout() {
     this.authService.logout().subscribe({
       next: () => {
