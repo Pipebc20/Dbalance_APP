@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { formatDate } from '@angular/common';
@@ -56,9 +56,12 @@ export class IngresoService {
     return this.http.post<Ingreso>(this.apiUrl, ingresoNormalizado);
   }
 
-  obtenerIngresos(): Observable<IngresoResponse> {
-    return this.http.get<IngresoResponse>(this.apiUrl);
-  }
+  obtenerIngresos(filtro?: { mes?: number; anio?: number }): Observable<IngresoResponse> {
+  let params = new HttpParams();
+  if (filtro?.mes)  params = params.set('mes', filtro.mes);
+  if (filtro?.anio) params = params.set('anio', filtro.anio);
+  return this.http.get<IngresoResponse>(this.apiUrl, { params });
+ }
 
   eliminarIngreso(id: number): Observable<{message: string}> {
     return this.http.delete<{message: string}>(`${this.apiUrl}/${id}`);

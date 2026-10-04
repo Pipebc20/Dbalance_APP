@@ -3,6 +3,7 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { IngresoService } from '../../services/ingreso.service';
 import { GastoService } from '../../services/gasto.service';
 import { AuthService } from '../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,6 +16,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   gastos: any[] = [];
   totalGasto = 0;
   totalIngreso = 0;
+  balance = 0;
+  mesSeleccionado: number | null = null;
+  anioSeleccionado: number | null = null;
+  meses: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
+  anios: number[] = Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - i);
 
   public chartOptions: ChartOptions = {
     responsive: true,
@@ -34,6 +40,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private ingresoService: IngresoService,
     private gastoService: GastoService,
     private authService: AuthService,
+    private translate: TranslateService,
     private router: Router
   ) {}
 
@@ -71,27 +78,64 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
-  obtenerIngresos(): void {
-    this.ingresoService.obtenerIngresos().subscribe({
-      next: response => {
-        this.ingresos = Array.isArray(response.data) ? response.data : [];
-        this.totalIngreso = this.ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
-        this.actualizarGraficoIngresos();
-      },
-      error: err => console.error('Error fetching ingresos:', err)
-    });
-  }
+ obtenerIngresos(): void {
+  this.ingresoService.obtenerIngresos({
+    mes: this.mesSeleccionado ?? undefined,
+    anio: this.anioSeleccionado ?? undefined
+  }).subscribe({
+    next: response => {
+      this.ingresos = Array.isArray(response.data) ? response.data : [];
+      this.totalIngreso = this.ingresos.reduce((sum, ingreso) => sum + Number(ingreso.monto), 0);
+      this.calcularBalance();
+      this.actualizarGraficoIngresos();
+    },
+    error: err => console.error('Error fetching ingresos:', err)
+  });
+}
 
-  obtenerGastos(): void {
-    this.gastoService.obtenerGastos().subscribe({
-      next: response => {
-        this.gastos = Array.isArray(response.data) ? response.data : [];
-        this.totalGasto = this.gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
-        this.actualizarGraficoGastos();
-      },
-      error: err => console.error('Error fetching gastos:', err)
-    });
-  }
+obtenerGastos(): void {
+  this.gastoService.obtenerGastos({
+    mes: this.mesSeleccionado ?? undefined,
+    anio: this.anioSeleccionado ?? undefined
+  }).subscribe({
+    next: response => {
+      this.gastos = Array.isArray(response.data) ? response.data : [];
+      this.totalGasto = this.gastos.reduce((sum, gasto) => sum + Number(gasto.monto), 0);
+      this.calcularBalance();
+      this.actualizarGraficoGastos();
+    },
+    error: err => console.error('Error fetching gastos:', err)
+  });
+}
+
+nombreMes(mes: number): string {
+  return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
+}
+
+onMesChange(valor: string): void {
+  this.mesSeleccionado = valor ? Number(valor) : null;
+  this.recargar();
+}
+
+onAnioChange(valor: string): void {
+  this.anioSeleccionado = valor ? Number(valor) : null;
+  this.recargar();
+}
+
+limpiarFiltro(): void {
+  this.mesSeleccionado = null;
+  this.anioSeleccionado = null;
+  this.recargar();
+}
+
+private recargar(): void {
+  this.obtenerIngresos();
+  this.obtenerGastos();
+}
+
+calcularBalance(): void {
+  this.balance = this.totalIngreso - this.totalGasto;
+}
 
   actualizarGraficoIngresos(): void {
     this.ingresosChartData = {

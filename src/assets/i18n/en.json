@@ -11,6 +11,10 @@
   "LOGIN_BUTTON": "Login",
   "NO_ACCOUNT": "Don't have an account?",
   "REGISTER_NOW": "Register now",
+  "ALL_MONTHS": "All months",
+  "ALL_YEARS": "All years",
+  "CLEAR_FILTER": "Clear filter",
+  "NET_BALANCE": "Net balance",
 
   "REGISTER": "Register",
   "CREATE_ACCOUNT": "Create a new account",

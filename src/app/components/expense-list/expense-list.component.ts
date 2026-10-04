@@ -13,6 +13,10 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 export class ExpenseListComponent implements OnInit {
   expenses: any[] = [];
   total: number = 0;
+  mesSeleccionado: number | null = null;
+  anioSeleccionado: number | null = null;
+  meses: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
+  anios: number[] = Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - i);
 
   constructor(
     private gastoService: GastoService,
@@ -25,19 +29,42 @@ export class ExpenseListComponent implements OnInit {
   }
 
   obtenerGastos(): void {
-    this.gastoService.obtenerGastos().subscribe(
-      (response) => {
-        if (response && response.data) {
-          this.expenses = response.data;
-          this.calcularTotal();
-        }
-      },
-      (error) => {
-        console.error('Error al obtener los gastos:', error);
-        this.showErrorToast('EXPENSE_FETCH_ERROR');
+  this.gastoService.obtenerGastos({
+    mes: this.mesSeleccionado ?? undefined,
+    anio: this.anioSeleccionado ?? undefined
+  }).subscribe(
+    (response) => {
+      if (response && response.data) {
+        this.expenses = response.data;
+        this.calcularTotal();
       }
-    );
-  }
+    },
+    (error) => {
+      console.error('Error al obtener los gastos:', error);
+      this.showErrorToast('EXPENSE_FETCH_ERROR');
+    }
+  );
+}
+
+nombreMes(mes: number): string {
+  return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
+}
+
+onMesChange(valor: string): void {
+  this.mesSeleccionado = valor ? Number(valor) : null;
+  this.obtenerGastos();
+}
+
+onAnioChange(valor: string): void {
+  this.anioSeleccionado = valor ? Number(valor) : null;
+  this.obtenerGastos();
+}
+
+limpiarFiltro(): void {
+  this.mesSeleccionado = null;
+  this.anioSeleccionado = null;
+  this.obtenerGastos();
+}
 
   calcularTotal(): void {
     this.total = this.expenses.reduce((sum, expense) => sum + parseFloat(expense.monto), 0);

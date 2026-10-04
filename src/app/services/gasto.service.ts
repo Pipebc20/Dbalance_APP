@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -28,9 +28,12 @@ export class GastoService {
     return this.http.post<Gasto>(this.apiUrl, gasto);
   }
 
-  obtenerGastos(): Observable<GastoResponse> {
-    return this.http.get<GastoResponse>(this.apiUrl);
-  }
+  obtenerGastos(filtro?: { mes?: number; anio?: number }): Observable<GastoResponse> {
+  let params = new HttpParams();
+  if (filtro?.mes)  params = params.set('mes', filtro.mes);
+  if (filtro?.anio) params = params.set('anio', filtro.anio);
+  return this.http.get<GastoResponse>(this.apiUrl, { params });
+}
 
   eliminarGasto(id: number): Observable<{message: string}> {
     return this.http.delete<{message: string}>(`${this.apiUrl}/${id}`);

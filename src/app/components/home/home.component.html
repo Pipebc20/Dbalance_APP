@@ -1,13 +1,57 @@
-<section class="d-flex align-items-center justify-content-center flex-column text-center py-16">
+<section class="welcome d-flex align-items-center justify-content-center flex-column text-center">
   <h1 class="fw-bold mb-3">{{ 'WELCOME' | translate }} 💰📈</h1>
   <p class="lead">{{ 'DESCRIPTION' | translate }}</p>
   <div class="d-flex gap-3 mt-3">
-    <a class="btn btn-primary" routerLink="/gastos/nuevo">{{ 'ADD_EXPENSE' | translate }}</a>
-    <a class="btn btn-secondary" routerLink="/ingresos/nuevo">{{ 'ADD_INCOME' | translate }}</a>
+    <a class="btn btn-primary" routerLink="/ingresos/nuevo">{{ 'ADD_INCOME' | translate }}</a>
+    <a class="btn btn-secondary" routerLink="/gastos/nuevo">{{ 'ADD_EXPENSE' | translate }}</a>
   </div>
 </section>
 
-<section class="py-16">
+<section class="stats">
+  <div class="container mx-auto px-4">
+
+    <!-- Filtro de mes y año -->
+    <div class="d-flex align-items-center justify-content-center flex-wrap gap-2 mb-4">
+      <select class="form-select w-auto" (change)="onMesChange($any($event.target).value)">
+        <option value="" [selected]="mesSeleccionado === null">{{ 'ALL_MONTHS' | translate }}</option>
+        <option *ngFor="let m of meses" [value]="m" [selected]="m === mesSeleccionado">
+          {{ nombreMes(m) | titlecase }}
+        </option>
+      </select>
+
+      <select class="form-select w-auto" (change)="onAnioChange($any($event.target).value)">
+        <option value="" [selected]="anioSeleccionado === null">{{ 'ALL_YEARS' | translate }}</option>
+        <option *ngFor="let a of anios" [value]="a" [selected]="a === anioSeleccionado">{{ a }}</option>
+      </select>
+
+      <button class="btn btn-outline-secondary" (click)="limpiarFiltro()"
+              *ngIf="mesSeleccionado || anioSeleccionado">
+        {{ 'CLEAR_FILTER' | translate }}
+      </button>
+    </div>
+
+    <!-- Totales y balance neto -->
+    <div class="d-flex flex-wrap justify-content-center gap-4">
+      <div class="stat-card">
+        <p class="mb-1">{{ 'TOTAL_INCOME' | translate }}</p>
+        <h3 class="fw-bold text-success m-0">{{ totalIngreso | currency }}</h3>
+      </div>
+      <div class="stat-card">
+        <p class="mb-1">{{ 'TOTAL_SPENT' | translate }}</p>
+        <h3 class="fw-bold text-danger m-0">{{ totalGasto | currency }}</h3>
+      </div>
+      <div class="stat-card">
+        <p class="mb-1">{{ 'NET_BALANCE' | translate }}</p>
+        <h3 class="fw-bold m-0" [ngClass]="balance >= 0 ? 'text-success' : 'text-danger'">
+          {{ balance | currency }}
+        </h3>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="summary">
   <div class="container mx-auto px-4">
     <h2 class="text-4xl font-bold mb-8 text-center">💰 {{ 'FINANCIAL_SUMMARY' | translate }}</h2>
     <div class="grid grid-flow-col auto-cols-max gap-4">

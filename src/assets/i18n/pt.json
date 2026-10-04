@@ -11,6 +11,10 @@
   "LOGIN_BUTTON": "Entrar",
   "NO_ACCOUNT": "Não tem uma conta?",
   "REGISTER_NOW": "Registre-se agora",
+  "ALL_MONTHS": "Todos os meses",
+  "ALL_YEARS": "Todos os anos",
+  "CLEAR_FILTER": "Limpar filtro",
+  "NET_BALANCE": "Saldo líquido",
 
   "REGISTER": "Registro",
   "CREATE_ACCOUNT": "Crie uma nova conta",
