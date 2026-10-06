@@ -21,6 +21,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
     fecha: new FormControl('', Validators.required)
   });
   expenseId?: number;
+  categorias: string[] = [];
   currentDate: string = new Date().toISOString().split('T')[0]; // Fecha actual inicial (2025-05-07)
   private dateSubscription: Subscription = new Subscription();
 
@@ -33,6 +34,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.loadDataIntoForm();
+    this.cargarCategorias();
     this.loadDataIntoForm();
 
     // Escuchar cambios en el campo de fecha
@@ -64,7 +67,10 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
   saveExpense(): void {
     if (this.expenseForm.valid) {
-      const gasto = this.expenseForm.value;
+      const gasto = {
+        ...this.expenseForm.value,
+        categoria: this.normalizarCategoria(this.expenseForm.value.categoria)
+      };
 
       if (this.expenseId) {
         this.gastoService.actualizarGasto(this.expenseId, gasto).subscribe(
@@ -91,6 +97,29 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  private cargarCategorias(): void {
+  this.gastoService.obtenerGastos().subscribe(
+    (response) => {
+      const vistas = new Map<string, string>();
+      (response?.data ?? []).forEach(g => {
+        const nombre = (g.categoria ?? '').trim();
+        const clave = nombre.toLowerCase();
+        if (nombre && !vistas.has(clave)) {
+          vistas.set(clave, nombre);
+        }
+      });
+      this.categorias = Array.from(vistas.values()).sort((a, b) => a.localeCompare(b));
+    },
+    (error) => console.error('Error al obtener las categorías:', error)
+  );
+}
+
+private normalizarCategoria(valor: string): string {
+  const limpio = (valor ?? '').trim();
+  const existente = this.categorias.find(c => c.toLowerCase() === limpio.toLowerCase());
+  return existente ?? limpio;
+}
 
   hasError(field: string): boolean {
     const errorsObject = this.expenseForm.get(field)?.errors ?? {};

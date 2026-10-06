@@ -15,9 +15,14 @@
       type="text"
       formControlName="categoria"
       class="form-control {{ hasError('categoria') ? 'is-invalid' : '' }}"
+      list="listaCategorias"
+      autocomplete="off"
       id="categoriaInput"
       [placeholder]="'CATEGORY_PLACEHOLDER' | translate"
     />
+    <datalist id="listaCategorias">
+      <option *ngFor="let categoria of categorias" [value]="categoria"></option>
+    </datalist>
     <div class="invalid-feedback" [ngSwitch]="getCurrentError('categoria')">
       <span *ngSwitchCase="'required'">{{ "CATEGORY_REQUIRED" | translate }}</span>
       <span *ngSwitchCase="'maxlength'">{{ "CATEGORY_MAXLENGTH" | translate }}</span>

@@ -161,6 +161,7 @@
   "CONFIRM_DELETE_BUDGET": "Você tem certeza de que deseja excluir este orçamento?",
   "NO_BUDGETS": "Nenhum orçamento criado",
   "BUDGET_ALERT": "Você ultrapassou o orçamento em:",
+  "EXPORT_EXCEL": "Exportar para Excel",
 
   "NUMBER": "#",
   "EXPENSE_TYPE_LABEL": "Tipo de despesa",

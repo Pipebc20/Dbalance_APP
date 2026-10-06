@@ -158,6 +158,7 @@
   "CONFIRM_DELETE_BUDGET": "Êtes-vous sûr de vouloir supprimer ce budget ?",
   "NO_BUDGETS": "Aucun budget créé",
   "BUDGET_ALERT": "Vous avez dépassé le budget pour :",
+  "EXPORT_EXCEL": "Exporter vers Excel",
 
   "NUMBER": "#",
   "NEW_EXPENSE_TITLE": "Nouvelle dépense",

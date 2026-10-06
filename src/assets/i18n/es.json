@@ -168,6 +168,7 @@
   "CONFIRM_DELETE_BUDGET": "¿Estás seguro de que deseas eliminar este presupuesto?",
   "NO_BUDGETS": "No hay presupuestos creados",
   "BUDGET_ALERT": "Superaste el presupuesto en:",
+  "EXPORT_EXCEL": "Exportar a Excel",
 
   "NUMBER": "#",
   "NEW_EXPENSE_TITLE": "Nuevo gasto",

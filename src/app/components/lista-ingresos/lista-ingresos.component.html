@@ -29,6 +29,10 @@
           *ngIf="mesSeleccionado || anioSeleccionado">
     {{ "CLEAR_FILTER" | translate }}
   </button>
+
+  <button class="btn btn-outline-success ms-auto" (click)="exportarExcel()">
+    <i class="ri-file-excel-2-line"></i> {{ "EXPORT_EXCEL" | translate }}
+  </button>
 </div>
 
 <div class="table-responsive mb-5">

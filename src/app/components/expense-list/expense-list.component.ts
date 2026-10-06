@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GastoService } from '../../services/gasto.service';
+import { ExportService } from '../../services/export.service';
 import { TranslateService } from '@ngx-translate/core';
 import Toastify from 'toastify-js';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +14,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 export class ExpenseListComponent implements OnInit {
   expenses: any[] = [];
   total: number = 0;
+
+  // Filtro de mes y año
   mesSeleccionado: number | null = null;
   anioSeleccionado: number | null = null;
   meses: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -20,6 +23,7 @@ export class ExpenseListComponent implements OnInit {
 
   constructor(
     private gastoService: GastoService,
+    private exportService: ExportService,
     private translate: TranslateService,
     private dialog: MatDialog // Inyecta MatDialog
   ) {}
@@ -29,45 +33,83 @@ export class ExpenseListComponent implements OnInit {
   }
 
   obtenerGastos(): void {
-  this.gastoService.obtenerGastos({
-    mes: this.mesSeleccionado ?? undefined,
-    anio: this.anioSeleccionado ?? undefined
-  }).subscribe(
-    (response) => {
-      if (response && response.data) {
-        this.expenses = response.data;
-        this.calcularTotal();
+    this.gastoService.obtenerGastos({
+      mes: this.mesSeleccionado ?? undefined,
+      anio: this.anioSeleccionado ?? undefined
+    }).subscribe(
+      (response) => {
+        if (response && response.data) {
+          this.expenses = response.data;
+          this.calcularTotal();
+        }
+      },
+      (error) => {
+        console.error('Error al obtener los gastos:', error);
+        this.showErrorToast('EXPENSE_FETCH_ERROR');
       }
-    },
-    (error) => {
-      console.error('Error al obtener los gastos:', error);
-      this.showErrorToast('EXPENSE_FETCH_ERROR');
-    }
-  );
-}
-
-nombreMes(mes: number): string {
-  return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
-}
-
-onMesChange(valor: string): void {
-  this.mesSeleccionado = valor ? Number(valor) : null;
-  this.obtenerGastos();
-}
-
-onAnioChange(valor: string): void {
-  this.anioSeleccionado = valor ? Number(valor) : null;
-  this.obtenerGastos();
-}
-
-limpiarFiltro(): void {
-  this.mesSeleccionado = null;
-  this.anioSeleccionado = null;
-  this.obtenerGastos();
-}
+    );
+  }
 
   calcularTotal(): void {
     this.total = this.expenses.reduce((sum, expense) => sum + parseFloat(expense.monto), 0);
+  }
+
+  nombreMes(mes: number): string {
+    return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
+  }
+
+  onMesChange(valor: string): void {
+    this.mesSeleccionado = valor ? Number(valor) : null;
+    this.obtenerGastos();
+  }
+
+  onAnioChange(valor: string): void {
+    this.anioSeleccionado = valor ? Number(valor) : null;
+    this.obtenerGastos();
+  }
+
+  limpiarFiltro(): void {
+    this.mesSeleccionado = null;
+    this.anioSeleccionado = null;
+    this.obtenerGastos();
+  }
+
+  async exportarExcel(): Promise<void> {
+    if (!this.expenses.length) {
+      this.showErrorToast('NO_DATA_TO_SHOW');
+      return;
+    }
+
+    try {
+      await this.exportService.exportarExcel({
+        nombreHoja: this.translate.instant('EXPENSES'),
+        nombreTabla: 'TablaGastos',
+        archivo: this.nombreArchivo('gastos'),
+        tema: 'TableStyleMedium3',
+        etiquetas: {
+          categoria: this.translate.instant('CATEGORY'),
+          monto: this.translate.instant('AMOUNT'),
+          descripcion: this.translate.instant('DESCRIPTION_LABEL'),
+          fecha: this.translate.instant('DATE'),
+          total: this.translate.instant('TOTAL_SPENT')
+        },
+        filas: this.expenses.map(e => ({
+          categoria: e.categoria,
+          monto: Number(e.monto),
+          descripcion: e.descripcion,
+          fecha: String(e.fecha ?? '').substring(0, 10)
+        }))
+      });
+    } catch (error) {
+      console.error('Error al exportar a Excel:', error);
+    }
+  }
+
+  private nombreArchivo(base: string): string {
+    const partes = [base];
+    if (this.anioSeleccionado) partes.push(String(this.anioSeleccionado));
+    if (this.mesSeleccionado) partes.push(String(this.mesSeleccionado).padStart(2, '0'));
+    return partes.join('_') + '.xlsx';
   }
 
   deleteExpense(id: number): void {

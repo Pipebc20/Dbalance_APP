@@ -23,6 +23,7 @@ export class IngresoComponent implements OnInit, OnDestroy {
 
   ingresoId?: number;
   formTitle: string = '';
+  categorias: string[] = [];
   currentDate: string = new Date().toISOString().split('T')[0]; // Fecha actual inicial (2025-05-07)
   private dateSubscription: Subscription = new Subscription();
 
@@ -36,6 +37,7 @@ export class IngresoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDataIntoForm();
+    this.cargarCategorias();
     this.setFormTitle();
     this.translate.onLangChange.subscribe(() => this.setFormTitle());
 
@@ -75,7 +77,10 @@ export class IngresoComponent implements OnInit, OnDestroy {
 
   saveIngreso(): void {
     if (this.ingresoForm.valid) {
-      const ingreso = this.ingresoForm.value;
+      const ingreso = {
+  ...this.ingresoForm.value,
+  categoria: this.normalizarCategoria(this.ingresoForm.value.categoria)
+  };
 
       if (this.ingresoId) {
         this.ingresoService.actualizarIngreso(this.ingresoId, ingreso).subscribe(
@@ -102,6 +107,29 @@ export class IngresoComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  private cargarCategorias(): void {
+  this.ingresoService.obtenerIngresos().subscribe(
+    (response) => {
+      const vistas = new Map<string, string>();
+      (response?.data ?? []).forEach((i: any) => {
+        const nombre = String(i.categoria ?? '').trim();
+        const clave = nombre.toLowerCase();
+        if (nombre && !vistas.has(clave)) {
+          vistas.set(clave, nombre);
+        }
+      });
+      this.categorias = Array.from(vistas.values()).sort((a, b) => a.localeCompare(b));
+    },
+    (error) => console.error('Error al obtener las categorías:', error)
+  );
+}
+
+private normalizarCategoria(valor: string): string {
+  const limpio = (valor ?? '').trim();
+  const existente = this.categorias.find(c => c.toLowerCase() === limpio.toLowerCase());
+  return existente ?? limpio;
+}
 
   hasError(field: string): boolean {
     const errorsObject = this.ingresoForm.get(field)?.errors ?? {};

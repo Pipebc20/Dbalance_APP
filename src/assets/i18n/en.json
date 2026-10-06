@@ -166,6 +166,7 @@
   "CONFIRM_DELETE_BUDGET": "Are you sure you want to delete this budget?",
   "NO_BUDGETS": "No budgets created",
   "BUDGET_ALERT": "You went over budget in:",
+  "EXPORT_EXCEL": "Export to Excel",
 
   "NUMBER": "#",
   "EXPENSE_TYPE_LABEL": "Expense type",
