@@ -4,9 +4,16 @@
       <i class="bi bi-bar-chart me-2" style="font-size: 1.5rem;"></i> <!-- Ícono de gráfica de barras -->
       D<span>Balance</span>
     </a>
+
+    <!-- Selector de idioma en celular: visible junto al botón del menú -->
+    <div class="d-lg-none ms-auto me-2">
+      <ng-container *ngTemplateOutlet="selectorIdioma"></ng-container>
+    </div>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarToggler">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item me-lg-2" *ngIf="!isAuthPage()">
@@ -21,20 +28,20 @@
         <li class="nav-item" *ngIf="!isAuthPage()">
           <a class="nav-link" routerLinkActive="active" routerLink="/presupuestos">{{ 'BUDGETS' | translate }}</a>
         </li>
-        <!-- Selector de idioma -->
-        <li class="nav-item dropdown ms-3">
-          <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img [src]="'https://flagcdn.com/w40/' + getFlagCode(currentLang) + '.png'" alt="flag" width="20" height="15" />
-            {{ currentLang.toUpperCase() }}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li *ngFor="let lang of languages">
-              <a class="dropdown-item d-flex align-items-center gap-2" (click)="switchLang(lang.code)">
-                <img [src]="'https://flagcdn.com/w40/' + getFlagCode(lang.code) + '.png'" alt="{{ lang.label }}" width="20" height="15" />
-                {{ lang.label }}
-              </a>
-            </li>
-          </ul>
+
+        <!-- Selector de idioma en escritorio -->
+        <li class="nav-item d-none d-lg-flex align-items-center ms-3">
+          <ng-container *ngTemplateOutlet="selectorIdioma"></ng-container>
+        </li>
+
+        <!-- Botón de modo oscuro -->
+        <li class="nav-item ms-2 d-flex align-items-center">
+          <button type="button" class="nav-link"
+                  (click)="toggleTheme()"
+                  [title]="(isDark ? 'THEME_TO_LIGHT' : 'THEME_TO_DARK') | translate"
+                  [attr.aria-label]="(isDark ? 'THEME_TO_LIGHT' : 'THEME_TO_DARK') | translate">
+            <i [class]="isDark ? 'ri-sun-line' : 'ri-moon-line'" style="font-size: 1.25rem;"></i>
+          </button>
         </li>
 
         <!-- Botón de cerrar sesión -->
@@ -48,3 +55,24 @@
     </div>
   </div>
 </nav>
+
+<!-- Selector de idioma (se usa dos veces: celular y escritorio) -->
+<ng-template #selectorIdioma>
+  <div class="dropdown">
+    <button type="button" class="lang-pill" data-bs-toggle="dropdown" aria-expanded="false">
+      <img [src]="'https://flagcdn.com/w40/' + getFlagCode(currentLang) + '.png'" alt="" width="20" height="15" />
+      <span>{{ currentLang.toUpperCase() }}</span>
+      <svg width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l4 4 4-4"/>
+      </svg>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end lang-menu">
+      <li *ngFor="let lang of languages">
+        <button type="button" class="lang-item" [class.active]="lang.code === currentLang" (click)="switchLang(lang.code)">
+          <img [src]="'https://flagcdn.com/w40/' + getFlagCode(lang.code) + '.png'" [alt]="lang.label" width="28" height="20" />
+          <span>{{ lang.code.toUpperCase() }}</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</ng-template>

@@ -118,3 +118,10 @@ h2 {
 .bg-white.rounded-lg {
   padding: 1.5rem;
 }
+
+:host-context([data-bs-theme="dark"]) {
+  .stat-card {
+    background: var(--bs-tertiary-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  }
+}

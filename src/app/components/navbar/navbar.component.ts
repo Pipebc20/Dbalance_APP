@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,8 @@ export class NavbarComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private themeService: ThemeService
   ) {
     const savedLang = localStorage.getItem('lang');
     this.currentLang = savedLang || 'es';
@@ -25,6 +27,14 @@ export class NavbarComponent {
     this.translate.use(lang);
     this.currentLang = lang;
     localStorage.setItem('lang', lang);
+  }
+
+  get isDark(): boolean {
+    return this.themeService.esOscuro;
+  }
+
+  toggleTheme(): void {
+    this.themeService.alternar();
   }
 
   isAuthPage(): boolean {

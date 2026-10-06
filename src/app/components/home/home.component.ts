@@ -1,10 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { IngresoService } from '../../services/ingreso.service';
 import { GastoService } from '../../services/gasto.service';
 import { PresupuestoService, Presupuesto } from '../../services/presupuesto.service';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService, Tema } from '../../services/theme.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ingresos: any[] = [];
   gastos: any[] = [];
   totalGasto = 0;
@@ -27,6 +29,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // Aviso de presupuestos superados (siempre del mes en curso)
   presupuestosExcedidos: Presupuesto[] = [];
+
+  private temaSub?: Subscription;
 
   public chartOptions: ChartOptions = {
     responsive: true,
@@ -48,10 +52,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private presupuestoService: PresupuestoService,
     private authService: AuthService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
+    // Ajusta el color de los textos de las gráficas según el tema
+    this.temaSub = this.themeService.tema$.subscribe(t => this.actualizarColorGraficos(t));
+
     if (!this.authService.isAuthenticated()) {
       console.error('User not authenticated. Redirecting to login.');
       this.router.navigate(['/login']);
@@ -84,6 +92,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
+  }
+
+  ngOnDestroy(): void {
+    this.temaSub?.unsubscribe();
+  }
+
+  private actualizarColorGraficos(tema: Tema): void {
+    const color = tema === 'dark' ? '#dee2e6' : '#666666';
+    this.chartOptions = {
+      ...this.chartOptions,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { color }
+        }
+      }
+    };
   }
 
   obtenerIngresos(): void {

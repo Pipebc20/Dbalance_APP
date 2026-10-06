@@ -25,3 +25,82 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+/* ───── Modo oscuro ─────
+   Bootstrap 5.3 cambia solo sus propios componentes. Aquí van las clases
+   y estilos con colores fijos. */
+[data-bs-theme="dark"] {
+  .section-title {
+    color: var(--bs-body-color);
+  }
+
+  /* Tailwind: tarjetas y tablas de Inicio */
+  .bg-white {
+    background-color: var(--bs-tertiary-bg) !important;
+  }
+
+  .bg-gray-200 {
+    background-color: var(--bs-secondary-bg) !important;
+  }
+
+  .border-gray-300 {
+    border-color: var(--bs-border-color) !important;
+  }
+
+  /* Selectores y campos de formulario (tenían fondo blanco fijo) */
+  .form-select,
+  .form-control {
+    background-color: var(--bs-tertiary-bg);
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+  }
+
+  /* Tablas de Gastos e Ingresos */
+  .table-responsive,
+  .table {
+    background-color: var(--bs-tertiary-bg) !important;
+  }
+
+  .table {
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--bs-border-color);
+
+    th,
+    td {
+      color: var(--bs-body-color) !important;
+      border-color: var(--bs-border-color) !important;
+    }
+  }
+
+  /* Íconos de editar y borrar */
+  .table-data-action a,
+  .table-data-action button,
+  .table-data-action i {
+    color: var(--bs-body-color) !important;
+  }
+
+  /* Cuadro de confirmación al borrar (Angular Material) */
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: var(--bs-tertiary-bg);
+    --mdc-dialog-subhead-color: var(--bs-body-color);
+    --mdc-dialog-supporting-text-color: var(--bs-secondary-color);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p,
+    .mat-mdc-dialog-title,
+    .mat-mdc-dialog-content {
+      color: var(--bs-body-color) !important;
+    }
+  }
+
+  /* Versiones de Angular Material anteriores a la 15 */
+  .mat-dialog-container {
+    background-color: var(--bs-tertiary-bg);
+    color: var(--bs-body-color);
+  }
+}
