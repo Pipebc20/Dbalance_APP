@@ -31,6 +31,7 @@ import { NgModule } from '@angular/core';
    import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
    import { TranslateHttpLoader } from '@ngx-translate/http-loader';
    import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+   import { PresupuestosComponent } from './components/presupuestos/presupuestos.component';
 
    export function HttpLoaderFactory(http: HttpClient) {
      return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -47,7 +48,8 @@ import { NgModule } from '@angular/core';
        RegistroComponent,
        IngresoComponent,
        ListaIngresosComponent,
-       ConfirmDialogComponent
+       ConfirmDialogComponent,
+       PresupuestosComponent
      ],
      imports: [
        BrowserModule,

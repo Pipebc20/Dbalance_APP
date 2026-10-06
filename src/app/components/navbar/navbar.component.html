@@ -18,7 +18,9 @@
         <li class="nav-item" *ngIf="!isAuthPage()">
           <a class="nav-link" routerLinkActive="active" routerLink="/gastos">{{ 'EXPENSES' | translate }}</a>
         </li>
-
+        <li class="nav-item" *ngIf="!isAuthPage()">
+          <a class="nav-link" routerLinkActive="active" routerLink="/presupuestos">{{ 'BUDGETS' | translate }}</a>
+        </li>
         <!-- Selector de idioma -->
         <li class="nav-item dropdown ms-3">
           <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

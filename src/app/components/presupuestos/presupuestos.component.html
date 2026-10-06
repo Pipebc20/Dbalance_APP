@@ -1,0 +1,75 @@
+<div class="d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5 mb-4">
+  <h2 class="section-title">{{ 'BUDGETS' | translate }}</h2>
+
+  <div class="d-flex align-items-center flex-wrap gap-2">
+    <select class="form-select w-auto" (change)="onMesChange($any($event.target).value)">
+      <option *ngFor="let m of meses" [value]="m" [selected]="m === mes">
+        {{ nombreMes(m) | titlecase }}
+      </option>
+    </select>
+    <select class="form-select w-auto" (change)="onAnioChange($any($event.target).value)">
+      <option *ngFor="let a of anios" [value]="a" [selected]="a === anio">{{ a }}</option>
+    </select>
+  </div>
+</div>
+
+<div class="card p-3 mb-4">
+  <h5 class="mb-3">{{ (editandoId ? 'EDIT_BUDGET' : 'ADD_BUDGET') | translate }}</h5>
+  <div class="d-flex flex-wrap gap-3 align-items-end">
+    <div>
+      <label class="form-label" for="categoriaInput">{{ 'CATEGORY' | translate }}</label>
+      <input id="categoriaInput" class="form-control" list="listaCategorias"
+             maxlength="100" autocomplete="off" [(ngModel)]="categoria">
+      <datalist id="listaCategorias">
+        <option *ngFor="let c of categorias" [value]="c"></option>
+      </datalist>
+    </div>
+
+    <div>
+      <label class="form-label" for="limiteInput">{{ 'BUDGET_LIMIT' | translate }}</label>
+      <input id="limiteInput" type="number" min="0" step="0.01" class="form-control"
+             [(ngModel)]="montoLimite">
+    </div>
+
+    <button class="btn btn-primary" (click)="guardar()" [disabled]="!formularioValido">
+      {{ 'BUDGET_SAVE_BTN' | translate }}
+    </button>
+    <button class="btn btn-outline-secondary" *ngIf="editandoId" (click)="cancelarEdicion()">
+      {{ 'CANCEL' | translate }}
+    </button>
+  </div>
+</div>
+
+<p *ngIf="!presupuestos.length">{{ 'NO_BUDGETS' | translate }}</p>
+
+<div class="row g-3 mb-5">
+  <div class="col-12 col-md-6" *ngFor="let p of presupuestos">
+    <div class="card p-3 h-100">
+      <div class="d-flex justify-content-between align-items-start">
+        <h5 class="m-0">{{ p.categoria }}</h5>
+        <div>
+          <button class="btn btn-link p-0 me-2" (click)="editar(p)"><i class="ri-edit-box-line"></i></button>
+          <button class="btn btn-link p-0" (click)="eliminar(p)"><i class="ri-delete-bin-2-line"></i></button>
+        </div>
+      </div>
+
+      <p class="my-2">
+        {{ p.gastado | currency }} / {{ p.monto_limite | currency }} ({{ p.porcentaje }}%)
+      </p>
+
+      <div class="progress">
+        <div class="progress-bar" role="progressbar"
+             [ngClass]="claseBarra(p)" [style.width.%]="anchoBarra(p)"></div>
+      </div>
+
+      <small class="mt-2" [ngClass]="excedido(p) > 0 ? 'text-danger' : 'text-muted'">
+        <ng-container *ngIf="excedido(p) > 0; else dentroDelLimite">
+          {{ 'BUDGET_EXCEEDED_BY' | translate }}: {{ excedido(p) | currency }}
+        </ng-container>
+        <ng-template #dentroDelLimite>
+          {{ 'BUDGET_REMAINING' | translate }}: {{ p.restante | currency }}
+        </ng-template>
+      </small>
+    </div>
+  </div>
+</div>

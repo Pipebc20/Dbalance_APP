@@ -1,0 +1,20 @@
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.progress {
+  height: 12px;
+}
+
+h2.section-title {
+  font-size: 2rem; // Aumentamos de 2rem (típico para h2 en Bootstrap) a 2.5rem
+  line-height: 1.2; // Ajustamos la altura de línea para mejor legibilidad
+}
+

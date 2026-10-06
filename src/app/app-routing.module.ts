@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { IngresoComponent } from './components/ingresos/ingresos.component';
 import { ListaIngresosComponent } from './components/lista-ingresos/lista-ingresos.component';
 import { HomeComponent } from './components/home/home.component';
+import { PresupuestosComponent } from './components/presupuestos/presupuestos.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'gastos', component: ExpenseListComponent, canActivate: [AuthGuard] },
   { path: 'gastos/nuevo', component: ExpenseFormComponent, canActivate: [AuthGuard] },
   { path: 'gastos/:id/editar', component: ExpenseFormComponent, canActivate: [AuthGuard] },
+  { path: 'presupuestos', component: PresupuestosComponent, canActivate: [AuthGuard] },
 
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }
 ];

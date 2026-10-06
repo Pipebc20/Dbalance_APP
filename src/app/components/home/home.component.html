@@ -10,6 +10,14 @@
 <section class="stats">
   <div class="container mx-auto px-4">
 
+    <!-- Aviso de presupuestos superados (mes en curso) -->
+    <div class="alert alert-danger text-center" *ngIf="presupuestosExcedidos.length">
+      ⚠️ {{ 'BUDGET_ALERT' | translate }}
+      <span *ngFor="let p of presupuestosExcedidos; let last = last">
+        <strong>{{ p.categoria }}</strong>{{ last ? '' : ', ' }}
+      </span>
+    </div>
+
     <!-- Filtro de mes y año -->
     <div class="d-flex align-items-center justify-content-center flex-wrap gap-2 mb-4">
       <select class="form-select w-auto" (change)="onMesChange($any($event.target).value)">

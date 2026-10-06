@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { TranslateService } from '@ngx-translate/core';
 import { IngresoService } from '../../services/ingreso.service';
 import { GastoService } from '../../services/gasto.service';
+import { PresupuestoService, Presupuesto } from '../../services/presupuesto.service';
 import { AuthService } from '../../services/auth.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,10 +18,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   totalGasto = 0;
   totalIngreso = 0;
   balance = 0;
+
+  // Filtro de mes y año
   mesSeleccionado: number | null = null;
   anioSeleccionado: number | null = null;
   meses: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
   anios: number[] = Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - i);
+
+  // Aviso de presupuestos superados (siempre del mes en curso)
+  presupuestosExcedidos: Presupuesto[] = [];
 
   public chartOptions: ChartOptions = {
     responsive: true,
@@ -39,9 +45,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     private ingresoService: IngresoService,
     private gastoService: GastoService,
+    private presupuestoService: PresupuestoService,
     private authService: AuthService,
-    private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +63,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (user && user.id) {
           this.obtenerIngresos();
           this.obtenerGastos();
+          this.obtenerPresupuestosExcedidos();
         } else {
           console.error('No user data found. Logging out and redirecting to login.');
           this.authService.logout().subscribe(() => {
@@ -78,64 +86,74 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
- obtenerIngresos(): void {
-  this.ingresoService.obtenerIngresos({
-    mes: this.mesSeleccionado ?? undefined,
-    anio: this.anioSeleccionado ?? undefined
-  }).subscribe({
-    next: response => {
-      this.ingresos = Array.isArray(response.data) ? response.data : [];
-      this.totalIngreso = this.ingresos.reduce((sum, ingreso) => sum + Number(ingreso.monto), 0);
-      this.calcularBalance();
-      this.actualizarGraficoIngresos();
-    },
-    error: err => console.error('Error fetching ingresos:', err)
-  });
-}
+  obtenerIngresos(): void {
+    this.ingresoService.obtenerIngresos({
+      mes: this.mesSeleccionado ?? undefined,
+      anio: this.anioSeleccionado ?? undefined
+    }).subscribe({
+      next: response => {
+        this.ingresos = Array.isArray(response.data) ? response.data : [];
+        this.totalIngreso = this.ingresos.reduce((sum, ingreso) => sum + Number(ingreso.monto), 0);
+        this.calcularBalance();
+        this.actualizarGraficoIngresos();
+      },
+      error: err => console.error('Error fetching ingresos:', err)
+    });
+  }
 
-obtenerGastos(): void {
-  this.gastoService.obtenerGastos({
-    mes: this.mesSeleccionado ?? undefined,
-    anio: this.anioSeleccionado ?? undefined
-  }).subscribe({
-    next: response => {
-      this.gastos = Array.isArray(response.data) ? response.data : [];
-      this.totalGasto = this.gastos.reduce((sum, gasto) => sum + Number(gasto.monto), 0);
-      this.calcularBalance();
-      this.actualizarGraficoGastos();
-    },
-    error: err => console.error('Error fetching gastos:', err)
-  });
-}
+  obtenerGastos(): void {
+    this.gastoService.obtenerGastos({
+      mes: this.mesSeleccionado ?? undefined,
+      anio: this.anioSeleccionado ?? undefined
+    }).subscribe({
+      next: response => {
+        this.gastos = Array.isArray(response.data) ? response.data : [];
+        this.totalGasto = this.gastos.reduce((sum, gasto) => sum + Number(gasto.monto), 0);
+        this.calcularBalance();
+        this.actualizarGraficoGastos();
+      },
+      error: err => console.error('Error fetching gastos:', err)
+    });
+  }
 
-nombreMes(mes: number): string {
-  return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
-}
+  obtenerPresupuestosExcedidos(): void {
+    const hoy = new Date();
+    this.presupuestoService.obtenerPresupuestos(hoy.getMonth() + 1, hoy.getFullYear()).subscribe({
+      next: response => {
+        this.presupuestosExcedidos = (response.data || []).filter(p => (p.gastado ?? 0) > p.monto_limite);
+      },
+      error: err => console.error('Error fetching presupuestos:', err)
+    });
+  }
 
-onMesChange(valor: string): void {
-  this.mesSeleccionado = valor ? Number(valor) : null;
-  this.recargar();
-}
+  calcularBalance(): void {
+    this.balance = this.totalIngreso - this.totalGasto;
+  }
 
-onAnioChange(valor: string): void {
-  this.anioSeleccionado = valor ? Number(valor) : null;
-  this.recargar();
-}
+  nombreMes(mes: number): string {
+    return new Date(2000, mes - 1, 1).toLocaleString(this.translate.currentLang || 'es', { month: 'long' });
+  }
 
-limpiarFiltro(): void {
-  this.mesSeleccionado = null;
-  this.anioSeleccionado = null;
-  this.recargar();
-}
+  onMesChange(valor: string): void {
+    this.mesSeleccionado = valor ? Number(valor) : null;
+    this.recargar();
+  }
 
-private recargar(): void {
-  this.obtenerIngresos();
-  this.obtenerGastos();
-}
+  onAnioChange(valor: string): void {
+    this.anioSeleccionado = valor ? Number(valor) : null;
+    this.recargar();
+  }
 
-calcularBalance(): void {
-  this.balance = this.totalIngreso - this.totalGasto;
-}
+  limpiarFiltro(): void {
+    this.mesSeleccionado = null;
+    this.anioSeleccionado = null;
+    this.recargar();
+  }
+
+  private recargar(): void {
+    this.obtenerIngresos();
+    this.obtenerGastos();
+  }
 
   actualizarGraficoIngresos(): void {
     this.ingresosChartData = {
