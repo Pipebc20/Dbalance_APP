@@ -33,6 +33,8 @@
   "CATEGORY": "Categoria",
   "MOUNT": "Valor",
   "DATE": "Data",
+  "GOOGLE_LOGIN_ERROR": "Erro ao fazer login com o Google. Por favor, tente novamente.",
+  "GOOGLE_LOGIN_SUCCESS": "Login com o Google bem-sucedido!",
   "LOGOUT": "Sair",
   "CANCEL": "Cancelar",
   "DONT_HAVE_ACCOUNT": "Não tem uma conta?",

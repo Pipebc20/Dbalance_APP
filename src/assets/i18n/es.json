@@ -33,6 +33,8 @@
   "CATEGORY": "Categoría",
   "MOUNT": "Monto",
   "DATE": "Fecha",
+  "GOOGLE_LOGIN_ERROR": "Error al iniciar sesión con Google. Por favor, inténtalo de nuevo.",
+  "GOOGLE_LOGIN_SUCCESS": "¡Inicio de sesión con Google exitoso!",
   "LOGOUT": "Cerrar sesión",
   "CANCEL": "Cancelar",
   "DONT_HAVE_ACCOUNT": "¿No tienes una cuenta?",

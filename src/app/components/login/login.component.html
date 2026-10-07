@@ -5,10 +5,16 @@
         <h2 class="text-center">{{ 'LOGIN' | translate }} </h2>
         <p class="text-center text-muted">{{ 'WELCOME1' | translate }} 👋</p>
 
-        <button class="btn btn-light border w-100 mb-3 d-flex align-items-center justify-content-center" (click)="loginConGoogle()">
-          <img src="https://www.svgrepo.com/show/355037/google.svg" width="20" class="me-2">
-          {{ 'LOGIN_WITH_GOOGLE' | translate }}
-        </button>
+        <!-- Botón de Google: el visual usa tus traducciones; encima va el botón oficial (invisible) que recibe el clic -->
+        <div class="google-wrap mb-3" #googleWrap>
+          <div class="google-visual">
+            <span class="google-logo">
+              <img src="https://www.svgrepo.com/show/355037/google.svg" width="20" height="20" alt="">
+            </span>
+            <span class="google-text">{{ 'LOGIN_WITH_GOOGLE' | translate }}</span>
+          </div>
+          <div #googleBtn class="google-overlay"></div>
+        </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()" class="mb-3">
           <div class="mb-3">

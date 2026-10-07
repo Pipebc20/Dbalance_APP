@@ -61,6 +61,27 @@ export class AuthService {
     );
   }
 
+  loginConGoogle(credential: string): Observable<{ token: string; user: any; redirect?: string }> {
+  return this.http.post<{ token: string; user: any; redirect?: string }>(`${this.apiUrl}/auth/google`, { credential }).pipe(
+    tap((response) => {
+      if (response && response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user_id', response.user?.id?.toString() || '');
+        this.userSubject.next(response.user || null);
+        if (response.redirect) {
+          this.router.navigate([response.redirect]);
+        }
+      } else {
+        throw new Error('Respuesta inválida del servidor');
+      }
+    }),
+    catchError((error) => {
+      console.error('Error en login con Google:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
   logout(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout`, null, { headers: this.getAuthHeaders() }).pipe(
       tap(() => {

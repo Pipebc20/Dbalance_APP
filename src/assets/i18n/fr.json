@@ -33,6 +33,8 @@
   "CATEGORY": "Catégorie",
   "MOUNT": "Montant",
   "DATE": "Date",
+  "GOOGLE_LOGIN_ERROR": "Erreur lors de la connexion avec Google. Veuillez réessayer.",
+  "GOOGLE_LOGIN_SUCCESS": "Connexion avec Google réussie !",
   "LOGOUT": "Déconnexion",
   "CANCEL": "Annuler",
   "DONT_HAVE_ACCOUNT": "Vous n'avez pas de compte ?",

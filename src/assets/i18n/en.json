@@ -33,6 +33,8 @@
   "CATEGORY": "Category",
   "MOUNT": "Amount",
   "DATE": "Date",
+  "GOOGLE_LOGIN_ERROR": "Error logging in with Google. Please try again.",
+  "GOOGLE_LOGIN_SUCCESS": "Login with Google successful!",
   "LOGOUT": "Logout",
   "CANCEL": "Cancel",
   "DONT_HAVE_ACCOUNT": "Don't have an account?",
